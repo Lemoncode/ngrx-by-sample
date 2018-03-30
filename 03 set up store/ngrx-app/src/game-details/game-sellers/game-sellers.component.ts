@@ -1,28 +1,29 @@
-import { Component } from '@angular/core'
+import { Component, OnInit } from '@angular/core'
+import { ActivatedRoute } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { State } from '../reducers';
+import * as gameSellers from '../actions/game-sellers.actions';
+import { GameSeller } from '../models/game-seller.model';
 
 @Component({
   selector: 'app-game-sellers',
   templateUrl: './game-sellers.component.html'
 })
-export class GameSellersComponent {
-  sellers = [
-    {
-      gameName: 'Super Mario',
-      name: 'Old Shop',
-      amount: 2,
-      price: 75.4
-    },
-    {
-      gameName: 'Super Mario',
-      name: 'New Shop',
-      amount: 1,
-      price: 75.4
-    },
-    {
-      gameName: 'Super Mario',
-      name: 'Regular Shop',
-      amount: 2,
-      price: 55.5
-    }
-  ];
+export class GameSellersComponent implements OnInit {
+  sellers: GameSeller[];
+
+  constructor(
+    private route: ActivatedRoute,
+    private store: Store<State>
+  ) {
+    this.store.select('gameDetails')
+      .subscribe((gameDetails) => {
+        this.sellers = gameDetails.gameSellers.gameSellers;
+      });
+  }
+
+  ngOnInit(): void {
+    const id = this.route.snapshot.params['id'];
+    this.store.dispatch(new gameSellers.LoadGameSellers(id));
+  }
 }

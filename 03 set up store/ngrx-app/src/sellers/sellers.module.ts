@@ -4,11 +4,18 @@ import { SellerSummaryComponent } from './seller-summary/seller-summary.componen
 import { SellerListComponent } from './seller-list/seller-list.component';
 import { SellersRoutingModule } from './sellers-routing.module';
 
+import { StoreModule } from '@ngrx/store';
+import { reducers } from './reducers';
+
 @NgModule({
   imports: [
     CommonModule,
-    SellersRoutingModule
+    SellersRoutingModule,
+    StoreModule.forFeature('sellers', reducers)
   ],
-  declarations: [SellerSummaryComponent, SellerListComponent]
+  declarations: [
+    SellerSummaryComponent,
+    SellerListComponent
+  ]
 })
 export class SellersModule { }

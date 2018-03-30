@@ -4,12 +4,19 @@ import { SellerDetailsComponent } from './seller-details/seller-details.componen
 import { GameSellersComponent } from './game-sellers/game-sellers.component';
 import { CreateGameComponent } from './create-game/create-game.component';
 import { GameDetailsRoutingModule } from './game-details-routing.module';
+import { StoreModule } from '@ngrx/store';
+import { reducers } from './reducers';
 
 @NgModule({
   imports: [
     CommonModule,
-    GameDetailsRoutingModule
+    GameDetailsRoutingModule,
+    StoreModule.forFeature('gameDetails', reducers)
   ],
-  declarations: [SellerDetailsComponent, GameSellersComponent, CreateGameComponent]
+  declarations: [
+    SellerDetailsComponent,
+    GameSellersComponent,
+    CreateGameComponent
+  ]
 })
 export class GameDetailsModule { }

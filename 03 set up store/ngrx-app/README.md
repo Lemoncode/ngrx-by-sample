@@ -219,7 +219,7 @@ export class GameListComponent implements OnInit {
 ```
 ### 9. Now that we got this working it's time to wire up the other two modules of our application. First of all we are going to need new models.
 
-* Create a new folder `src/game-details/models`
+* Create a new folder `src/game-details/models` and add `game-seller.model.ts`
 
 ```typescript
 export interface GameSeller {
@@ -232,7 +232,7 @@ export interface GameSeller {
 ```
 ### 10. Now we are going to create `actions`
 
-* Create a new folder `src/game-details/actions`
+* Create a new folder `src/game-details/actions` and add `game-sellers.actions.ts`
 
 ```typescript
 import { Action } from '@ngrx/store';
@@ -249,7 +249,7 @@ export type Action = LoadGameSellers;
 ```
 ### 11. Now we are going to create `reducers`
 
-* Create a new folder `src/game-details/reducers`
+* Create a new folder `src/game-details/reducers` and add `game-sellers.reducer.ts`
 
 ```typescript game-sellers.reducer.ts
 import * as gameSellers from '../actions/game-sellers.actions';
@@ -296,8 +296,9 @@ export function reducer(state = initialState, action: gameSellers.Action): State
       return state;
   }
 }
-
 ```
+* Now we create `index.ts`, that will contain all the related reducers on this module.
+
 ```typescript index.ts
 import * as fromGameSellers from './game-sellers.reducer';
 
@@ -452,7 +453,7 @@ export class GameSellersComponent implements OnInit {
 
 ```
 
-### 15. Now we are going to connect our last module, `sellers` to `ngrx/store`. Remind that this module it's loded laizily 
+### 15. Now we are going to connect our last module, `sellers` to `ngrx/store`. Remind that this module it's lazy loaded. 
 
 * Create `src/sellers/models/seller.model.ts`
 
