@@ -2,6 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
 import { StoreModule } from '@ngrx/store';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { reducers } from './reducers';
 
 import { AppComponent } from './app.component';
@@ -21,7 +22,8 @@ import { GameDetailsModule } from '../game-details/game-details.module';
     BrowserModule,
     GameDetailsModule,
     AppRoutingModule,
-    StoreModule.forRoot(reducers)
+    StoreModule.forRoot(reducers),
+    StoreDevtoolsModule.instrument()
   ],
   providers: [],
   bootstrap: [AppComponent]
