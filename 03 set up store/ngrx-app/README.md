@@ -27,43 +27,7 @@ Before running the tests make sure you are serving the app via `ng serve`.
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
 
-## In this demo we are going to create an eager module.
-
-## 1. These components will be loaded with AppModule.
-
-* `game-summary.component.*`
-* `game-list.component.*`
-* `game-stock.service.*`
-
-### 1.1 Create routes for AppModule
-
-* ''
-* '/games'
-
-## 2. Create a new module GameDetailsModule. This module will be loaded eagerly.
-
-* `game-sellers.component.*`
-* `seller-details.component.*` 
-* `create-game.component.*`
-
-### 2.1 Create routes for GameDetailsModule
-
-* 'games/:id'
-* 'games/:id/edit'
-* 'games/new'
-
-## 3. Create a new module SellersModules. This module will be load lazily.
-
-* `seller-summary.component.*`
-* `seller-list.component.*`
-* `create-seller.component.*`
-* `seller.service.*`
-
-### 3.1 Create routes for SellersModule
-
-* 'sellers'
-* 'sellers/:id/edit'
-* 'sellers/new'
+## In this demo we are going to create the store and its basic plugin.
 
 ## Steps
 
@@ -72,25 +36,17 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 ```bash
 $ npm i @ngrx/store@4.1.0 @ngrx/effects@4.1.0 @ngrx/router-store@4.1.0 --save
 ```
+* Depending on the version of typescript you might have to install typescript.
 ```bash
 $ npm i typescript@2.6.1 --save-exact
 ```
-```bash
-$ npm i typescript@2.6.1 --save-development
-```
-### 2. Create `app/games/models` 
+
+### 2. Create `app/games/models/game.model.ts` 
 
 ```typescript
-import { Action } from '@ngrx/store';
-
-export const LOAD_GAMES = 'LOAD_GAMES';
-
-export class LoadGames implements Action {
-  readonly type = LOAD_GAMES;
+export interface Game {
+  name: string;
 }
-
-export type Actions = LoadGames;
-
 ```
 
 
@@ -99,7 +55,7 @@ export type Actions = LoadGames;
 * `app/games/reducers`
 * `app/games/actions`
 
-### 4. Now we are going to create our first action
+### 4. Now we are going to create our first action, place it in the actions folder.
 
 ```typescript games.actions.ts
 import { Action } from '@ngrx/store';
@@ -113,7 +69,7 @@ export class LoadGames implements Action {
 export type Actions = LoadGames;
 
 ```
-### 5. After this we are going to create our first reducer.
+### 5. After this we are going to create our first reducer, place it in the reducers folder.
 
 ```typescript games.reducers.ts
 import * as games from '../actions/games.actions';
