@@ -7,7 +7,7 @@ import { GameSummaryComponent } from './games/game-summary/game-summary.componen
 import { GameListComponent } from './games/game-list/game-list.component';
 
 import { AppRoutingModule } from './app-routing.module';
-import { GameDetailsModule } from './game-details/game-details.module';
+import { GameDetailsModule } from '../game-details/game-details.module';
 
 @NgModule({
   declarations: [

@@ -31,13 +31,13 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 
 ## Steps
 
-### 1. Create a new module at `src` level.
+### 1. Create a new module at `src/app` level.
 
 ```bash
 $ ng generate module sellers
 ```
 
-### 2. Generate a new component seller-summary
+### 2. Generate a new component `seller-summary` at `src/app/sellers`
 
 ```bash
 $ ng g component seller-summary
@@ -114,6 +114,7 @@ export class SellersModule { }
 
 ```diff seller-list.component.ts
 -import { Component, OnInit } from '@angular/core';
++import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-seller-list',
@@ -152,9 +153,7 @@ export class SellersModule { }
 
 ### 4. Now we are going to create a new module for the routes of `sellers.module.ts`
 
-```bash
-$ ng g module sellers-routing
-```
+* Create a new file `sellers-routing.module.ts` in `src/app/sellers` 
 
 ```typescript sellers-routing.module.ts
 import { NgModule } from '@angular/core';
@@ -193,7 +192,7 @@ import { SellerListComponent } from './seller-list/seller-list.component';
 export class SellersModule { }
 
 ```
-### 5. For last we have to upadate our `app.module.ts`, so it can notice that has to load the new lazy module created.
+### 5. For last we have to upadate our `app-routing.module.ts`, so it can notice that has to load the new lazy module created.
 
 
 ```diff app-routing.module.ts
