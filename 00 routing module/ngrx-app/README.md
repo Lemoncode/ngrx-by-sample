@@ -132,20 +132,54 @@ export class AppComponent {
 }
 ```
 
+```css app.component.css
+ul {
+    padding: 0;
+    list-style: none;
+}
+
+.navbar {
+    display: flex;
+    align-items: center;
+    border: 1px solid rgba(238,238,238 ,1);
+    border-radius: 3px;
+    background-color: lightgrey
+}
+
+.navbar__item {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    font-size: 2rem;
+}
+
+.navbar__logo {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.navbar__logo img {
+    max-width: 3.5rem;
+}
+```
+
 ```diff app.component.html
-<h1>
+-<h1>
 -  {{title}}
-+  ngrx
-</h1>
-+<nav>
-+  <ul>
-+    <li>
-+      <a href=""></a>
-+      <a href=""></a>
-+      <a href=""></a>
-+    </li>
-+  </ul>
-+</nav>
+-</h1>
++<ul class="navbar">
++  <li class="navbar__item">
++    games
++  </li>
++  <li class="navbar__item">
++    sellers
++  </li>
++  <li class="navbar__logo">
++    <img src="assets/ngrx.svg"/>
++  </li>
++  <li class="navbar__item">
++    log in
++  </li>
++</ul>
 +<router-outlet></router-outlet>
 +
 ```
