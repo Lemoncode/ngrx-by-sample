@@ -3,7 +3,12 @@ import { NgModule } from '@angular/core';
 
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import {
+  StoreRouterConnectingModule,
+  RouterStateSerializer
+} from '@ngrx/router-store';
 import { reducers } from './reducers';
+import { CustomSerializer } from './shared/utils';
 
 import { AppComponent } from './app.component';
 import { GameSummaryComponent } from './games/game-summary/game-summary.component';
@@ -23,9 +28,12 @@ import { GameDetailsModule } from '../game-details/game-details.module';
     GameDetailsModule,
     AppRoutingModule,
     StoreModule.forRoot(reducers),
+    StoreRouterConnectingModule,
     StoreDevtoolsModule.instrument()
   ],
-  providers: [],
+  providers: [
+    { provide: RouterStateSerializer, useClass: CustomSerializer }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

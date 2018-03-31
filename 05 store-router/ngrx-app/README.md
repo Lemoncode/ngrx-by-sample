@@ -27,9 +27,9 @@ Before running the tests make sure you are serving the app via `ng serve`.
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
 
-## In this demo we are going to add `ngrx/store-devtools`
+## In this demo we are going to add `ngrx/store-router`
 
-* For this demo we need to previously get installed the redux dev tools extension for Chrome
+* `store-router` allows us to bind the representation of the route (the browser url), to the route state on the ngrx store. This give us more power when we compose selctors.
 
 ## Steps
 
@@ -38,61 +38,92 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 * Create `app/shared/utils.ts`
 
 ```typescript
-import { RouterStateSerializer } from '@ngrx/router-store';
-import { RouterStateSnapshot, Params } from '@angular/router';
+import { Params } from '@angular/router';
 
 export interface RouterStateUrl {
-  url: string;
-  queryParams: Params;
+    url: string;
+    queryParams: Params;
+    params: Params;
 }
-
-export class CustomStateStateSerializer implements RouterStateSerializer<RouterStateUrl> {
-  serialize(routerState: RouterStateSnapshot): RouterStateUrl {
-    const { url } = routerState;
-    const queryParams = routerState.root.queryParams;
-
-    return { url, queryParams };
-  }
-}
-
 ```
-### 2. Now we can change `app/reducers/index.ts`
+
+### 2. We are going to modify our top reducers, `src/app/reducers/index.ts`, adding a new reducer that it's provided by `ngrx/router-store`, which generic type will be the one previously created.
 
 ```diff
-- import {ActionReducerMap} from '@ngrx/store';
-+import {
-+  ActionReducerMap,
-+  ActionReducer,
-+  MetaReducer
-+} from '@ngrx/store';
-+import { environment } from '../../environments/environment';
-+import { RouterStateUrl } from '../shared/utils';
-+import * as fromRouter from '@ngrx/router-store';
-import * as games from '../games/reducers/games.reducer';
+import { ActionReducerMap } from '@ngrx/store';
++ import { RouterStateUrl } from '../shared/utils';
+import * as games from '../games/reducers/games.reducers';
++ import * as fromRouter from '@ngrx/router-store';
+
 
 export interface State {
-  games: games.State;
-+  routerReducer: fromRouter.RouterReducerState<RouterStateUrl>;
+    games: games.State
++   routerReducer: fromRouter.RouterReducerState<RouterStateUrl>
 };
 
 export const reducers: ActionReducerMap<State> = {
-  games: games.reducer,
-+  routerReducer: fromRouter.routerReducer
+    games: games.reducer
++   routerReducer: fromRouter.routerReducer 
 };
-
-+export function logger(reducer: ActionReducer<State>): ActionReducer<State> {
-+  return function (state: State, action: any): State {
-+    console.log(`State: ${state}; Action: ${action}`);
-+
-+    return reducer(state, action);
-+  };
-+}
-
-+export const metaReducers: MetaReducer<State>[] = !environment.production ?
-+  [logger] : [];
-+
 ```
-### 3. Now we can update `app.module.ts`
+
+* `RouterReducerState`, this one accepts a generic type, so  we can type it as `RouterStateUrl`
+
+### 3. First we are going to add a serializer for the applications routes. We need this serializer in order to bind the router with our state.
+
+* Open `app/shared/utils.ts` and modify as follows.
+
+```diff
+-import { Params } from '@angular/router';
++import { Params, RouterStateSnapshot } from '@angular/router';
++import { RouterStateSerializer } from '@ngrx/router-store';
+
+export interface RouterStateUrl {
+    url: string;
+    queryParams: Params;
+    params: Params;
+} 
+
++export class CustomSerializer implements RouterStateSerializer<RouterStateUrl> {
++    serialize(routerState: RouterStateSnapshot): RouterStateUrl {
++        
++    }
++}
+```
+### 4. Now lets implement the `serialize` method.
+
+```diff
+-import { Params, RouterStateSnapshot } from '@angular/router';
++import { Params, RouterStateSnapshot, ActivatedRouteSnapshot } from '@angular/router';
+import { RouterStateSerializer } from '@ngrx/router-store';
+
+export interface RouterStateUrl {
+    url: string;
+    queryParams: Params;
+    params: Params;
+}
+
+export class CustomSerializer implements RouterStateSerializer<RouterStateUrl> {
+    serialize(routerState: RouterStateSnapshot): RouterStateUrl {
++        const { url } = routerState;
++        const { queryParams } = routerState.root;
++
++        let state: ActivatedRouteSnapshot = routerState.root;
++        while (state.firstChild) {
++            state = state.firstChild;
++        }
++
++        const { params } = state;
++        return {
++            url,
++            queryParams,
++            params
++        };
+    }
+}
+```
+
+### 5. Now we can update `app.module.ts`
 
 ```diff
 import { BrowserModule } from '@angular/platform-browser';
@@ -106,9 +137,8 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 +  StoreRouterConnectingModule,
 +  RouterStateSerializer
 +} from '@ngrx/router-store';
--import { reducers } from './reducers';
-+import { reducers, metaReducers } from './reducers';
-+import { CustomStateStateSerializer } from './shared/utils';
+import { reducers } from './reducers';
++import { CustomSerializer } from './shared/utils';
 
 
 import { AppComponent } from './app.component';
@@ -130,113 +160,16 @@ import { GameDetailsModule } from '../game-details/game-details.module';
     HttpModule,
     GameDetailsModule,
     AppRoutingModule,
--   StoreModule.forRoot(reducers),
-+    StoreModule.forRoot(reducers, {metaReducers}),
+    StoreModule.forRoot(reducers),
 +    StoreRouterConnectingModule,
     StoreDevtoolsModule.instrument()
   ],
   providers: [
-+    { provide: RouterStateSerializer, useClass: CustomStateStateSerializer }
++    { provide: RouterStateSerializer, useClass: CustomSerializer }
   ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
 
 ```
-## NOTES:
-
-* Allows us to bind the representation of the route on the browser, route state into the ngrx store. This give us more power  when we compose selectors.
-
-```typescript
-import  * as fromRouter from '@ngrx/router-store';
-import { Params } from '@angular/router';
-import { ActionReducerMap, createFeatureSelector } from '@ngrx/store';
-
-export interface RouterStateUrl {
-  url: string;
-  queryParams: Params;
-  params: Params;
-}
-
-/*
- RouterReducerState, this one accepts a generic type, so  we can type it as RouterStateUrl
-*/
-
-export interface State {
-  routerReducer: fromRouter.RouterReducerState<RouterStateUrl>
-}
-
-/*
-  To type these reducers we use ActionReducerMap, add safety chcking type
-*/
-export const reducers: ActionReducerMap<State> = {
-  routerReducer: fromRouter.RouterReducerState
-};
-
-// Creating our selector
-// We don't have to write this line: fromRouter.RouterReducerState<RouterStateUrl>
-// we put it just for checking the type.
-export const getRouterState = createFeatureSelector<
-  fromRouter.RouterReducerState<RouterStateUrl>
->('routerReducer')
-```
-
-* We have to add a function that it's called the router state serializer
-* This function will `map` the `router snapshot` to our state.
-
-```typescript
-import  * as fromRouter from '@ngrx/router-store';
-import {
-  ActivatedRouteSnapshot,
-  RouterStateSnapshot,
-  Params
-} from '@angular/router';
-import { ActionReducerMap, createFeatureSelector } from '@ngrx/store';
-
-export interface RouterStateUrl {
-  url: string;
-  queryParams: Params;
-  params: Params;
-}
-
-export interface State {
-  routerReducer: fromRouter.RouterReducerState<RouterStateUrl>
-}
-
-export const reducers: ActionReducerMap<State> = {
-  routerReducer: fromRouter.RouterReducerState
-};
-
-export const getRouterState = createFeatureSelector<
-  fromRouter.RouterReducerState<RouterStateUrl>
->('routerReducer')
-
-/*
- What we are going to return is RouterStateUrl. What we rae going to do is to compose a new object
- based on the properties of the router. Any time we navigate, or change the url by code or in the 
- browser, this function will be called.
-*/
-export class CustomSerializer 
-  implements fromRouter.RouterStateSerializer<RouterStateUrl> {
-  serialize(routerState: RouterStateSnapshot): RouterStateUrl {
-    const { url } = routerState;
-    const { queryParams } = routerState.root;
-    /*
-      To retrieve params we have to iterate over the ActivatedRouteSnapshot. It's the angular router
-    */
-    let state: ActivatedRouteSnapshot = routerState.root;
-    while(state.firstChild) {
-      state = state.firstChild;
-    }
-
-    const { params } = state;
-
-    return { url, queryParms, params  }; // This the object that will be bound to the router state tree.
-  }
-}
-
-
-```
-* Then we can jump to our `app.module.ts` and plug everything that we need.
-* After plug everything together we can watch on redux dev tools how is this working.
-
+* Open the redux dev tools on the browser and watch that a new slice on the state has been added.
