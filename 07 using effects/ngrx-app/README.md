@@ -278,3 +278,280 @@ import { GameDetailsModule } from '../game-details/game-details.module';
 export class AppModule { }
 
 ```
+### 9. Now we are going to do the same for game-details, so first of all we are going to create a new service, `src/game-details/game-sellers.service.ts`
+
+```typescript
+import { Injectable } from '@angular/core';
+import { GameSeller } from './models/game-seller.model';
+import { Observable } from 'rxjs';
+
+let _gemeSellers = [
+    {
+        gameId: 1,
+        gameName: 'Super Mario',
+        sellers: [
+            {
+                name: 'Old Shop',
+                amount: 2,
+                price: 75.4
+            },
+            {
+                name: 'New Shop',
+                amount: 1,
+                price: 75.4
+            },
+            {
+                name: 'Regular Shop',
+                amount: 0,
+                price: 55.5
+            },
+        ],
+    },
+    {
+        gameId: 2,
+        gameName: 'Zelda',
+        sellers: [
+            {
+                name: 'Old Shop',
+                amount: 1,
+                price: 65.09
+            },
+            {
+                name: 'Regular Shop',
+                amount: 3,
+                price: 55.5
+            },
+        ],
+    },
+    {
+        gameId: 3,
+        gameName: 'Sonic',
+        sellers: [],
+    },
+];
+
+@Injectable()
+export class GameSellersService {
+    getSellersByGameId(id: number): Observable<GameSeller[]> {
+        const gameSellersModel = _gemeSellers
+            .filter((g) => g.gameId === id)
+            .map((g) => {
+                return g.sellers.map(s => {
+                    return {
+                        gameName: g.gameName,
+                        name: s.name,
+                        amount: s.amount,
+                        price: s.price
+                    };
+                })
+            })
+            .reduce(
+                (current, actual) => current.concat(actual),
+                []);
+        return Observable.of(gameSellersModel)
+    }
+}
+```
+
+### 10. Register the new created service at `game-details.module.ts`
+
+```diff
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { SellerDetailsComponent } from './seller-details/seller-details.component';
+import { GameSellersComponent } from './game-sellers/game-sellers.component';
+import { CreateGameComponent } from './create-game/create-game.component';
+import { GameDetailsRoutingModule } from './game-details-routing.module';
+import { StoreModule } from '@ngrx/store';
+import { reducers } from './reducers';
++import { GameSellersService } from './game-sellers.service';
+
+@NgModule({
+  imports: [
+    CommonModule,
+    GameDetailsRoutingModule,
+    StoreModule.forFeature('gameDetails', reducers)
+  ],
+  declarations: [
+    SellerDetailsComponent,
+    GameSellersComponent,
+    CreateGameComponent
+  ],
++  providers: [
++    GameSellersService
++  ]
+})
+export class GameDetailsModule { }
+
+```
+### 11. Add `src/game-details/effects/game-sellers.effects.ts`
+
+```typescript
+import { Injectable } from '@angular/core';
+import { GameSellersService } from '../game-sellers.service';
+import {
+    Effect,
+    Actions,
+    ofType
+} from '@ngrx/effects';
+import * as fromGameSellers from '../actions/game-sellers.actions';
+
+@Injectable()
+export class GameSellersEffects {
+    constructor(
+        private gameSellersService: GameSellersService,
+        private actions$: Actions
+    ) {}
+}
+```
+
+### 12. Now as before we have to refactor our actions.
+
+* Open `src/game-details/actions/game-sellers.actions` 
+
+```diff
+import { Action } from '@ngrx/store';
++import { GameSeller } from '../models/game-seller.model';
+
+export const LOAD_GAME_SELLERS = 'LOAD_GAME_SELLERS';
++export const LOAD_GAME_SELLERS_SUCCESS = 'LOAD_GAME_SELLERS_SUCCESS';
+
+export class LoadGameSellers implements Action {
+    readonly type = LOAD_GAME_SELLERS;
+    constructor(public payload: string) {}
+}
+
++export class LoadGameSellersSuccess implements Action {
++    readonly type = LOAD_GAME_SELLERS_SUCCESS;
++    constructor(public payload: GameSeller[]) {}
++}
+
+-export type Action = LoadGameSellers;
++export type Action = LoadGameSellers | LoadGameSellersSuccess;
+```
+
+### 13. Now we are going to change our reducer, so it will not use hardcoded data.
+
+```diff
+import * as gameSellers from '../actions/game-sellers.actions';
+import { GameSeller } from '../models/game-seller.model';
+
+export interface State {
+    gameSellers: GameSeller[];
+}
+
+const initialState = {
+    gameSellers: []
+};
+
+- const SELLERS = [
+-     {
+-       gameName: 'Super Mario',
+-       name: 'Old Shop',
+-       amount: 2,
+-       price: 75.4
+-     },
+-     {
+-       gameName: 'Super Mario',
+-       name: 'New Shop',
+-       amount: 1,
+-       price: 75.4
+-     },
+-     {
+-       gameName: 'Super Mario',
+-       name: 'Regular Shop',
+-       amount: 0,
+-       price: 55.5
+-     },
+-   ];
+
+  export const reducer = (
+      state:State = initialState,
+      action: gameSellers.Action
+  ): State => {
+      switch (action.type) {
+-          case gameSellers.LOAD_GAME_SELLERS:
+-              console.log(action.payload);
+-              return {
+-                  ...state,
+-                  gameSellers: [...SELLERS]
+-              }
++          case gameSellers.LOAD_GAME_SELLERS_SUCCESS:
++              return {
++                  ...state,
++                  gameSellers: [...action.payload]
++              }
+          default:
+              return state;
+      }
+  }
+```
+
+### 14. Change the effects so it handle the `side effect request`.
+
+```diff
+import { Injectable } from '@angular/core';
+import { GameSellersService } from '../game-sellers.service';
+import {
+    Effect,
+    Actions,
++    ofType
+} from '@ngrx/effects';
+import * as fromGameSellers from '../actions/game-sellers.actions';
++import { switchMap } from 'rxjs/operators/switchMap';
++import { map } from 'rxjs/operators/map';
+
+export class GameSellersEffects {
+    constructor(
+        private gameSellersService: GameSellersService,
+        private actions$: Actions
+    ) {}
++    @Effect()
++    gameSellers$ = this.actions$.pipe(
++        ofType(fromGameSellers.LOAD_GAME_SELLERS),
++        switchMap((gameId) => this.gameSellersService.getSellersByGameId(+gameId)),
++        map(
++            (gs) => new fromGameSellers.LoadGameSellersSuccess(gs)
++        )
++    )
+}
+```
+
+* If we open `game-sellers.component.ts`, we notice any refactor has to be done.
+
+### 15. No we have to run our effect for a feature module. 
+
+* Open `game-details.module.ts` and make the following changes. 
+
+```diff
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { SellerDetailsComponent } from './seller-details/seller-details.component';
+import { GameSellersComponent } from './game-sellers/game-sellers.component';
+import { CreateGameComponent } from './create-game/create-game.component';
+import { GameDetailsRoutingModule } from './game-details-routing.module';
+import { StoreModule } from '@ngrx/store';
++import { EffectsModule } from '@ngrx/effects';
+import { reducers } from './reducers';
+import { GameSellersService } from './game-sellers.service';
++import { GameSellersEffects } from './effects/game-sellers.effects';
+
+@NgModule({
+  imports: [
+    CommonModule,
+    GameDetailsRoutingModule,
+    StoreModule.forFeature('gameDetails', reducers),
++    EffectsModule.forFeature([GameSellersEffects]),
+  ],
+  declarations: [
+    SellerDetailsComponent,
+    GameSellersComponent,
+    CreateGameComponent
+  ],
+  providers: [
+    GameSellersService
+  ]
+})
+export class GameDetailsModule { }
+
+```

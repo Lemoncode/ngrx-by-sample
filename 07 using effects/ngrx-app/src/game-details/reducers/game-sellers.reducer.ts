@@ -9,39 +9,17 @@ const initialState = {
     gameSellers: []
 };
 
-const SELLERS = [
-    {
-      gameName: 'Super Mario',
-      name: 'Old Shop',
-      amount: 2,
-      price: 75.4
-    },
-    {
-      gameName: 'Super Mario',
-      name: 'New Shop',
-      amount: 1,
-      price: 75.4
-    },
-    {
-      gameName: 'Super Mario',
-      name: 'Regular Shop',
-      amount: 0,
-      price: 55.5
-    },
-  ];
-
-  export const reducer = (
-      state:State = initialState,
-      action: gameSellers.Action
-  ): State => {
-      switch (action.type) {
-          case gameSellers.LOAD_GAME_SELLERS:
-              console.log(action.payload);
-              return {
-                  ...state,
-                  gameSellers: [...SELLERS]
-              }
-          default:
-              return state;
-      }
-  }
+export const reducer = (
+    state: State = initialState,
+    action: gameSellers.Action
+): State => {
+    switch (action.type) {
+        case gameSellers.LOAD_GAME_SELLERS_SUCCESS:
+            return {
+                ...state,
+                gameSellers: [...action.payload]
+            }
+        default:
+            return state;
+    }
+}
