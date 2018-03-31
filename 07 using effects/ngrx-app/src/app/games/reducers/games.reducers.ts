@@ -9,22 +9,15 @@ const initialState = {
     games: []
 };
 
-const GAMES = [
-    { name: 'Super Mario' },
-    { name: 'Zelda' },
-    { name: 'Sonic' },
-];
-
 export const reducer = (
     state: State = initialState,
     action: games.Actions
 ): State => {
-    // return null;
     switch (action.type) {
-        case games.LOAD_GAMES:
+        case games.LOAD_GAMES_SUCCESS:
             return {
                 ...state,
-                games: [...GAMES]
+                games: [...action.payload]
             }
         default:
             return state;

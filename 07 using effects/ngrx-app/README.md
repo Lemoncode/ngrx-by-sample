@@ -27,6 +27,8 @@ Before running the tests make sure you are serving the app via `ng serve`.
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
 
+* Change to downgrade rxjs 5.5.6 to 5.1.0
+
 ## In this demo we are going to add `ngrx/effects`
 
 ## Steps
@@ -75,7 +77,7 @@ import { AppComponent } from './app.component';
 import { GameSummaryComponent } from './games/game-summary/game-summary.component';
 import { GameListComponent } from './games/game-list/game-list.component';
 
-import { GamesService } from './games/games.service';
++import { GamesService } from './games/games.service';
 
 import { AppRoutingModule } from './app-routing.module';
 import { GameDetailsModule } from '../game-details/game-details.module';
@@ -97,7 +99,7 @@ import { GameDetailsModule } from '../game-details/game-details.module';
     StoreDevtoolsModule.instrument()
   ],
   providers: [
-    GamesService,
++    GamesService,
     { provide: RouterStateSerializer, useClass: CustomStateStateSerializer }
   ],
   bootstrap: [AppComponent]
@@ -111,7 +113,7 @@ export class AppModule { }
 ```typescript
 import { Injectable } from '@angular/core';
 import { GamesService } from '../games.service';
-import { Effect, Actions } from '@ngrx/effects';
+import { Effect, Actions, ofType } from '@ngrx/effects';
 import * as fromGames from '../actions/games.actions';
 import { switchMap } from 'rxjs/operators/switchMap';
 import { map } from 'rxjs/operators/map';
@@ -207,15 +209,14 @@ export class GamesEffects {
     private actions$: Actions
   ) {}
 
-+  // tslint:disable-next-line:member-ordering
-+  @Effect()
-+  games$ = this.actions$
-+    .ofType(fromGames.LOAD_GAMES)
-+    .switchMap(
-+      () => this.gamesService.loadGames()
-+    )
-+    .map(
-+      (games) => new fromGames.LoadGamesSuccess(games)
++  @Effect() games$ = this.actions$.pipe(
++        ofType(fromGames.LOAD_GAMES),
++        switchMap(
++            () => this.gamesService.loadGames()
++        ),
++        map(
++            (gs) => new fromGames.LoadGamesSuccess(gs)
++        )
 +    );
 }
 
