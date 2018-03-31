@@ -1,0 +1,27 @@
+ul {
+    padding: 0;
+    list-style: none;
+}
+
+.navbar {
+    display: flex;
+    align-items: center;
+    border: 1px solid rgba(238,238,238 ,1);
+    border-radius: 3px;
+    background-color: lightgrey
+}
+
+.navbar__item {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    font-size: 2rem;
+}
+
+.navbar__logo {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.navbar__logo img {
+    max-width: 3.5rem;
+}
