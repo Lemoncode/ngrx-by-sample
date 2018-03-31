@@ -555,3 +555,5 @@ import { GameSellersService } from './game-sellers.service';
 export class GameDetailsModule { }
 
 ```
+
+### 16. For last, there `sellers` module is the last one, as exercise, try to refactor by yourself.
