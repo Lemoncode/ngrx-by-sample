@@ -3,9 +3,9 @@ import { Game } from './models/game.model';
 import { Observable } from 'rxjs';
 
 let _games = [
-    { name: 'Super Mario' },
-    { name: 'Zelda' },
-    { name: 'Sonic' },
+    { name: 'Super Mario', id: 1 },
+    { name: 'Zelda', id: 2 },
+    { name: 'Sonic', id: 3 },
 ];
 
 @Injectable()
