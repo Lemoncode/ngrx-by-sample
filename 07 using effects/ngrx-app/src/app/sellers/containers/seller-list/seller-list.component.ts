@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { State } from '../reducers';
-import * as sellers from '../actions/sellers.actions';
-import { Seller } from '../models/seller.model';
+import { State } from '../../store/reducers';
+import * as sellers from '../../store/actions/sellers.actions';
+import { Seller } from '../../models/seller.model';
 
 @Component({
   selector: 'app-seller-list',

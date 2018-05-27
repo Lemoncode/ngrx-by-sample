@@ -15,7 +15,7 @@ export interface State {
 };
 
 export const reducers: ActionReducerMap<State> = {
-    games: games.reducer,
+    games: games.reducer, // TODO: Move to its own module.
     routerReducer: fromRouter.routerReducer
 };
 

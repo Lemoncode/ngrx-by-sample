@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { SellerListComponent } from './seller-list/seller-list.component';
+import { SellerListComponent } from './containers/seller-list/seller-list.component';
 
 const routes: Routes = [
     { path: '', component: SellerListComponent }

@@ -1,5 +1,5 @@
 import * as sellers from '../actions/sellers.actions';
-import { Seller } from '../models/seller.model';
+import { Seller } from '../../models/seller.model';
 
 export interface State {
     sellers: Seller[];

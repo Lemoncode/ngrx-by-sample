@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { GameSeller } from './models/game-seller.model';
+import { GameSeller } from '../models/game-seller.model';
 import { Observable } from 'rxjs';
 
 let _gemeSellers = [

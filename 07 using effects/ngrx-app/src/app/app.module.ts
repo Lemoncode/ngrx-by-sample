@@ -13,8 +13,8 @@ import { CustomSerializer } from './shared/utils';
 import { GamesEffects } from './games/store/effects/games.effects';
 
 import { AppComponent } from './app.component';
-import { GameSummaryComponent } from './games/game-summary/game-summary.component';
-import { GameListComponent } from './games/game-list/game-list.component';
+import { GameSummaryComponent } from './games/components/game-summary/game-summary.component';
+import { GameListComponent } from './games/containers/game-list/game-list.component';
 
 import { AppRoutingModule } from './app-routing.module';
 import { GameDetailsModule } from './game-details/game-details.module'; // TODO: 

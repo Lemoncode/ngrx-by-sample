@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { SellerSummaryComponent } from './seller-summary/seller-summary.component';
-import { SellerListComponent } from './seller-list/seller-list.component';
+import { SellerSummaryComponent } from './components/seller-summary/seller-summary.component';
+import { SellerListComponent } from './containers/seller-list/seller-list.component';
 import { SellersRoutingModule } from './sellers-routing.module';
 
 import { StoreModule } from '@ngrx/store';
-import { reducers } from './reducers';
+import { reducers } from './store/reducers';
 
 @NgModule({
   imports: [
