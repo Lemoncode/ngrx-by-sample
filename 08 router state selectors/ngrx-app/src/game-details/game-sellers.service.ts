@@ -55,6 +55,7 @@ export class GameSellersService {
             .map((g) => {
                 return g.sellers.map(s => {
                     return {
+                        gameId: g.gameId,
                         gameName: g.gameName,
                         name: s.name,
                         amount: s.amount,

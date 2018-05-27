@@ -27,7 +27,7 @@ Before running the tests make sure you are serving the app via `ng serve`.
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
 
-* Change to downgrade rxjs 5.5.6 to 5.1.0
+>REFERENCE: https://toddmotto.com/ngrx-store-understanding-state-selectors
 
 ## In this demo we are going to add `router state selectors`
 
