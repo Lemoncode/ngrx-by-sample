@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Game } from './models/game.model';
+import { Game } from '../../games/models/game.model';
 import { Observable } from 'rxjs';
+
 
 let _games = [
     { name: 'Super Mario' },

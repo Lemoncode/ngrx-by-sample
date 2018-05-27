@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core'
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { State } from '../reducers';
-import * as gameSellers from '../actions/game-sellers.actions';
+import { State } from '../store/reducers';
+import * as gameSellers from '../store/actions/game-sellers.actions';
 import { GameSeller } from '../models/game-seller.model';
 
 @Component({

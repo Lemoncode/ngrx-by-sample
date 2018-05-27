@@ -6,9 +6,9 @@ import { CreateGameComponent } from './create-game/create-game.component';
 import { GameDetailsRoutingModule } from './game-details-routing.module';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
-import { reducers } from './reducers';
-import { GameSellersService } from './game-sellers.service';
-import { GameSellersEffects } from './effects/game-sellers.effects';
+import { reducers } from './store/reducers';
+import { GameSellersService } from './game-sellers.service'; // From core.
+import { GameSellersEffects } from './store/effects/game-sellers.effects';
 
 @NgModule({
   imports: [

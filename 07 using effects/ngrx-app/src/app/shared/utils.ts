@@ -2,6 +2,7 @@ import { Params, RouterStateSnapshot, ActivatedRouteSnapshot } from '@angular/ro
 import { RouterStateSerializer } from '@ngrx/router-store';
 import { ActionReducer } from '@ngrx/store';
 
+// TODO: Move to core.
 export interface RouterStateUrl {
     url: string;
     queryParams: Params;

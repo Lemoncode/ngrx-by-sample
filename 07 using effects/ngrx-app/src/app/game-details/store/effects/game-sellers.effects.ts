@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { GameSellersService } from '../game-sellers.service';
+import { GameSellersService } from '../../game-sellers.service';
+
 import {
     Effect,
     Actions,

@@ -1,5 +1,5 @@
 import { Action } from '@ngrx/store';
-import { Game } from '../models/game.model';
+import { Game } from '../../models/game.model';
 
 export const LOAD_GAMES = 'LOAD_GAMES';
 export const LOAD_GAMES_SUCCESS = 'LOAD_GAMES_SUCCESS';

@@ -4,8 +4,8 @@ import { CreateGameComponent } from './create-game/create-game.component';
 import { GameSellersComponent } from './game-sellers/game-sellers.component';
 
 const routes: Routes = [
-    { path: 'games/new', component: CreateGameComponent },
-    { path: 'games/:id', component: GameSellersComponent }
+    { path: 'games/new', component: CreateGameComponent }, // details/new
+    { path: 'games/:id', component: GameSellersComponent } // details/:id
 ];
 
 @NgModule({

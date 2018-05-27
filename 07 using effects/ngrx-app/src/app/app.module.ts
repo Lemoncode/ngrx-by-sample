@@ -10,16 +10,17 @@ import {
 } from '@ngrx/router-store';
 import { reducers, metaReducers } from './reducers';
 import { CustomSerializer } from './shared/utils';
-import { GamesEffects } from './games/effects/games.effects';
+import { GamesEffects } from './games/store/effects/games.effects';
 
 import { AppComponent } from './app.component';
 import { GameSummaryComponent } from './games/game-summary/game-summary.component';
 import { GameListComponent } from './games/game-list/game-list.component';
 
 import { AppRoutingModule } from './app-routing.module';
-import { GameDetailsModule } from '../game-details/game-details.module';
+import { GameDetailsModule } from './game-details/game-details.module'; // TODO: 
 
-import { GamesService } from './games/games.services';
+// import { GamesService } from './games/games.services'; //  TODO: Move to core.
+import { CoreModule } from './core/core.module';
 
 @NgModule({
   declarations: [
@@ -34,11 +35,12 @@ import { GamesService } from './games/games.services';
     StoreModule.forRoot(reducers, {metaReducers}),
     StoreRouterConnectingModule,
     StoreDevtoolsModule.instrument(),
-    EffectsModule.forRoot([GamesEffects])
+    EffectsModule.forRoot([GamesEffects]),
+    CoreModule.foorRoot()
   ],
   providers: [
     { provide: RouterStateSerializer, useClass: CustomSerializer },
-    GamesService
+    // GamesService
   ],
   bootstrap: [AppComponent]
 })

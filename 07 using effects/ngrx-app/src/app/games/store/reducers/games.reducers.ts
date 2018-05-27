@@ -1,5 +1,5 @@
 import * as games from '../actions/games.actions';
-import { Game } from '../models/game.model';
+import { Game } from '../../models/game.model';
 
 export interface State {
     games: Game[];
