@@ -8,7 +8,7 @@ import {
   StoreRouterConnectingModule,
   RouterStateSerializer
 } from '@ngrx/router-store';
-import { reducers, metaReducers } from './reducers';
+import { reducers, metaReducers } from './core/store/reducers';
 import { CustomSerializer } from './shared/utils';
 import { GamesEffects } from './games/store/effects/games.effects';
 

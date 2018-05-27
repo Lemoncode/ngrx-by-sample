@@ -4,10 +4,10 @@ import {
     ActionReducer,
     MetaReducer
 } from '@ngrx/store';
-import { RouterStateUrl } from '../shared/utils';
-import * as games from '../games/store/reducers/games.reducers';
+import { RouterStateUrl } from '../../../shared/utils'; // Move implemetation to core
+import * as games from '../../../games/store/reducers/games.reducers'; // Remove move to its own module
 import * as fromRouter from '@ngrx/router-store';
-import { environment } from '../../environments/environment';
+import { environment } from '../../../../environments/environment';
 
 export interface State {
     games: games.State,
