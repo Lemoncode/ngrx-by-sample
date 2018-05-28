@@ -4,7 +4,6 @@ import { GameListComponent } from './games/containers/game-list/game-list.compon
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: '/games' },
-  { path: 'games', component: GameListComponent }, // Move out to its own routing module
   { path: 'sellers', loadChildren: './sellers/sellers.module#SellersModule' }
 ];
 

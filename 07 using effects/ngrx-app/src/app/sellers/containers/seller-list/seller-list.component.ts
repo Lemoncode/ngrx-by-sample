@@ -9,11 +9,13 @@ import { Seller } from '../../models/seller.model';
   templateUrl: './seller-list.component.html'
 })
 export class SellerListComponent implements OnInit {
-  sellers: Seller[]
+  sellers: Seller[];
 
   constructor(private store: Store<State>) {
     this.store.select('sellers')
-      .subscribe((result) => this.sellers = result.sellers.sellers);
+      .subscribe((result) => {
+        this.sellers = result.sellers.sellers;
+      });
   }
 
   ngOnInit(): void {

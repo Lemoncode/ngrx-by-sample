@@ -21,15 +21,17 @@ import { GameDetailsModule } from './game-details/game-details.module'; // TODO:
 
 // import { GamesService } from './games/games.services'; //  TODO: Move to core.
 import { CoreModule } from './core/core.module';
+import { GamesModule } from './games/games.module';
 
 @NgModule({
   declarations: [
     AppComponent,
-    GameSummaryComponent,
-    GameListComponent
+    // GameSummaryComponent,
+    // GameListComponent
   ],
   imports: [
     BrowserModule,
+    GamesModule,
     GameDetailsModule,
     AppRoutingModule,
     StoreModule.forRoot(reducers, {metaReducers}),
