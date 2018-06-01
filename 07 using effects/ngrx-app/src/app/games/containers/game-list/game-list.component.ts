@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import * as fromRoot from '../../../core/store/reducers';
+// import * as fromRoot from '../../../core/store/reducers';
+import { State } from '../../store/reducers';
 import * as games from '../../store/actions/games.actions'; 
 import { Game } from '../../models/game.model';
 
@@ -10,10 +11,10 @@ import { Game } from '../../models/game.model';
 })
 export class GameListComponent implements OnInit {
   games: Game[];
-  constructor(private store: Store<fromRoot.State>) { 
+  constructor(private store: Store<State>) { 
     this.store.select('games')
       .subscribe((stateGames) => {
-        this.games = stateGames.games;
+        this.games = stateGames.games.games;
       });
   }
 

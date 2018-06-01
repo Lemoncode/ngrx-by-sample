@@ -52,18 +52,17 @@ export class GameSellersService {
     getSellersByGameId(id: number): Observable<GameSeller[]> {
         const gameSellers = _gemeSellers
             .filter((g) => g.gameId === id)
-            .map((g) => {
-                return g.sellers.map(s => {
-                    return {
-                        gameName: g.gameName,
-                        name: s.name,
-                        amount: s.amount,
-                        price: s.price
-                    };
-                })
-            }).reduce(
+            .map((g) => (
+                g.sellers.map(s => ({
+                    gameName: g.gameName,
+                    name: s.name,
+                    amount: s.amount,
+                    price: s.price
+                }))
+            )).reduce(
                 (current, actual) => current.concat(actual),
-                []);
+                []
+            );
 
         return Observable.of(gameSellers);
     }

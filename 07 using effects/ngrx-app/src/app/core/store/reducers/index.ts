@@ -10,12 +10,12 @@ import * as fromRouter from '@ngrx/router-store';
 import { environment } from '../../../../environments/environment';
 
 export interface State {
-    games: games.State,
+    // games: games.State,
     routerReducer: fromRouter.RouterReducerState<RouterStateUrl>
 };
 
 export const reducers: ActionReducerMap<State> = {
-    games: games.reducer, // TODO: Move to its own module.
+    // games: games.reducer, // TODO: Move to its own module.
     routerReducer: fromRouter.routerReducer
 };
 

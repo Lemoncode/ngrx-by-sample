@@ -5,6 +5,7 @@ import { StoreModule } from '@ngrx/store';
 import { SellerSummaryComponent } from './components/seller-summary/seller-summary.component';
 import { SellerListComponent } from './containers/seller-list/seller-list.component';
 import { SellersRoutingModule } from './sellers-routing.module';
+import { CoreModule } from '../core/core.module';
 
 import { reducers } from './store/reducers';
 
@@ -12,6 +13,7 @@ import { reducers } from './store/reducers';
   imports: [
     CommonModule,
     SellersRoutingModule,
+    CoreModule,
     StoreModule.forFeature('sellers', reducers)
   ],
   declarations: [

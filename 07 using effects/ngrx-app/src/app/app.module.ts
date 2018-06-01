@@ -25,9 +25,7 @@ import { GamesModule } from './games/games.module';
 
 @NgModule({
   declarations: [
-    AppComponent,
-    // GameSummaryComponent,
-    // GameListComponent
+    AppComponent
   ],
   imports: [
     BrowserModule,
@@ -42,7 +40,6 @@ import { GamesModule } from './games/games.module';
   ],
   providers: [
     { provide: RouterStateSerializer, useClass: CustomSerializer },
-    // GamesService
   ],
   bootstrap: [AppComponent]
 })

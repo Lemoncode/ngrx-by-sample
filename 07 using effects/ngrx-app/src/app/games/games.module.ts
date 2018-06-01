@@ -7,14 +7,15 @@ import { GameSummaryComponent } from './components/game-summary/game-summary.com
 import { GameListComponent } from './containers/game-list/game-list.component';
 import { GamesRoutingModule } from './games-routing.module';
 
-// TODO: Create reducers
-// TODO: Register StoreModule
+import { reducers } from './store/reducers';
+
 
 @NgModule({
     imports: [
         CommonModule,
         CoreModule,
-        GamesRoutingModule
+        GamesRoutingModule,
+        StoreModule.forFeature('games', reducers)
     ],
     declarations: [
         GameSummaryComponent,
